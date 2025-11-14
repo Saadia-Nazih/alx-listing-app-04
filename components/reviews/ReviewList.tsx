@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-// 1. Definiamo la "forma" di una recensione
+// 1. Definiamo la "forma" di una singola recensione
 interface Review {
   id: string;
   author: string;
-  rating: number; // Es. 4.5
+  rating: number; // Es. 4 o 5
   comment: string;
 }
 
@@ -51,32 +51,33 @@ export default function ReviewList({ propertyId }: ReviewListProps) {
 
   // 5. Gestione degli stati di caricamento ed errore
   if (loading) {
-    return <p>Caricamento recensioni...</p>;
+    return <p className="text-sm text-gray-600">Caricamento recensioni...</p>;
   }
 
   if (error) {
-    return <p className="text-red-500">{error}</p>;
+    return <p className="text-sm text-red-500">{error}</p>;
   }
 
-  if (reviews.length === 0) {
-    return <p>Nessuna recensione disponibile per questa proprietà.</p>;
-  }
-
-  // 6. Mostra l'elenco delle recensioni
+  // 6. Mostra l'elenco delle recensioni (o un messaggio se vuoto)
   return (
     <div className="mt-8">
       <h2 className="text-2xl font-semibold mb-4">Recensioni</h2>
-      <div className="space-y-4">
-        {reviews.map((review) => (
-          <div key={review.id} className="border p-4 rounded-lg bg-gray-50">
-            <div className="flex justify-between items-center mb-1">
-              <h3 className="font-bold">{review.author}</h3>
-              <span className="text-yellow-500">⭐️ {review.rating} / 5</span>
+      
+      {reviews.length === 0 ? (
+        <p className="text-gray-600">Nessuna recensione disponibile per questa proprietà.</p>
+      ) : (
+        <div className="space-y-4">
+          {reviews.map((review) => (
+            <div key={review.id} className="border p-4 rounded-lg bg-gray-50">
+              <div className="flex justify-between items-center mb-1">
+                <h3 className="font-bold">{review.author}</h3>
+                <span className="text-yellow-500">⭐️ {review.rating} / 5</span>
+              </div>
+              <p className="text-gray-700">{review.comment}</p>
             </div>
-            <p className="text-gray-700">{review.comment}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

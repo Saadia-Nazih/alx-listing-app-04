@@ -3,7 +3,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-// Le "props" che il componente accetta
+// Definiamo le "props" che il componente accetta
 interface BookingFormProps {
   propertyId: string;
 }
@@ -20,9 +20,8 @@ export default function BookingForm({ propertyId }: BookingFormProps) {
 
   // 3. Funzione che gestisce l'invio del modulo
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault(); // Impedisce alla pagina di ricaricarsi!
+    event.preventDefault(); // Impedisce alla pagina di ricaricarsi
 
-    // Semplice validazione
     if (!startDate || !endDate) {
       setError("Per favore, seleziona sia la data di inizio che quella di fine.");
       return;
@@ -36,12 +35,12 @@ export default function BookingForm({ propertyId }: BookingFormProps) {
       // 4. Ecco la chiamata POST!
       // Inviamo un oggetto con i dati necessari all'endpoint
       const response = await axios.post("/api/bookings", {
-        propertyId, // L'ID della proprietà
-        startDate,    // La data di inizio dallo stato
-        endDate       // La data di fine dallo stato
+        propertyId, // L'ID della proprietà (dalle props)
+        startDate,  // La data di inizio (dallo stato)
+        endDate     // La data di fine (dallo stato)
       });
-
-      // Se la chiamata va a buon fine...
+      
+      // Se va a buon fine...
       setSuccess(true);
       setStartDate(""); // Resettiamo i campi
       setEndDate("");
@@ -50,11 +49,11 @@ export default function BookingForm({ propertyId }: BookingFormProps) {
       console.error("Error creating booking:", err);
       setError("Impossibile creare la prenotazione. Riprova.");
     } finally {
-      setSubmitting(false); // In ogni caso, abbiamo finito di inviare
+      setSubmitting(false); // Finito
     }
   };
 
-  // 5. Se la prenotazione è andata a buon fine, mostriamo un messaggio
+  // Se la prenotazione è andata a buon fine, mostriamo un messaggio
   if (success) {
     return (
       <div className="border p-4 rounded-lg bg-green-100 text-green-800">
@@ -62,7 +61,7 @@ export default function BookingForm({ propertyId }: BookingFormProps) {
         <p>Abbiamo ricevuto la tua richiesta.</p>
         <button 
           onClick={() => setSuccess(false)}
-          className="mt-2 text-sm font-bold"
+          className="mt-2 text-sm font-bold text-green-900"
         >
           Fai un'altra prenotazione
         </button>
@@ -70,9 +69,9 @@ export default function BookingForm({ propertyId }: BookingFormProps) {
     );
   }
 
-  // 6. Altrimenti, mostriamo il modulo
+  // Altrimenti, mostriamo il modulo
   return (
-    <form onSubmit={handleSubmit} className="border p-4 rounded-lg shadow-md space-y-4">
+    <form onSubmit={handleSubmit} className="border p-4 rounded-lg shadow-md space-y-4 bg-white">
       <h3 className="text-xl font-semibold">Prenota questa proprietà</h3>
       
       <div>
